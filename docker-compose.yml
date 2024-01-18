@@ -1,0 +1,39 @@
+version: '3'
+services:
+  front:
+    container_name: front
+    build: ./docker/front
+    ports:
+      - 5173:5173
+    volumes:
+      - ./front:/front
+    stdin_open: true
+    tty: true
+    environment:
+      - TZ=Asia/Tokyo
+    command: npm run dev
+
+  api:
+    container_name: api
+    build: ./docker/api
+    ports:
+      - 3000:3000
+    volumes:
+      - ./api:/api
+    stdin_open: true
+    tty: true
+    environment:
+      - TZ=Asia/Tokyo
+    # command: npm run start
+    # depends_on:
+    #   - mysql
+
+  # mysql:
+  #   image: mysql:8.0
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: your_password
+  #     MYSQL_DATABASE: your_database
+  #     MYSQL_USER: your_user
+  #     MYSQL_PASSWORD: your_password
+  #   volumes:
+  #     - ./mysql-data:/var/lib/mysql
