@@ -28,12 +28,22 @@ services:
     # depends_on:
     #   - mysql
 
-  # mysql:
-  #   image: mysql:8.0
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: your_password
-  #     MYSQL_DATABASE: your_database
-  #     MYSQL_USER: your_user
-  #     MYSQL_PASSWORD: your_password
-  #   volumes:
-  #     - ./mysql-data:/var/lib/mysql
+  db:
+    container_name: db
+    build: ./docker/db
+    image: mysql:8.0
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      TZ: 'Asia/Tokyo'
+    volumes:
+      - ./db/conf/my.cnf:/etc/mysql/conf.d/my.cnfs
+      - ./db/mysql:/var/lib/mysql
+
+volumes:
+  mysql-data:
+
