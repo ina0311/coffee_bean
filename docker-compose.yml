@@ -24,7 +24,7 @@ services:
     tty: true
     environment:
       - TZ=Asia/Tokyo
-    # command: npm run start
+    command: npm run nodemon
     # depends_on:
     #   - mysql
 
