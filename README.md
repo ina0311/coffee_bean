@@ -7,33 +7,40 @@
   何種類も飲んでいくうちに自分の好みがわかってきますが、詳細な情報まで記憶することは難しく、たまにコーヒーカードがもらえることもありますが、保管するのも大変です。
   　詳細なコーヒー豆の情報や自分の感想を記録するアプリを作成します。
 
-
 ## 技術面
+
   とりあえず、webアプリで作成していく。
   機能として写真から一気に情報を取得できるようにしたく、最終的にネイティブアプリにも応用できるように考える
-  ### backend
+
+### backend
+
     - JavaScript
     - TypeScript
     - Express
 
-  ### frondend
+### frontend
+
     - JavaScript
     - TypeScript
     - Vue3
 
-  ### infra
+### infra
+
     - Docker
     - MySQL
     - GCP
 
-  ### 外部API
+### 外部API
+
     - insta
     - twitter
 
-
 ## スケジュール
+
   MVPを２月から3上旬にデプロイできるように
-  ### MVP
+
+### MVP
+
     - ユーザー認証
     - 店詳細
     - 投稿

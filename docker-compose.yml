@@ -9,24 +9,31 @@ services:
       - ./front:/front
     stdin_open: true
     tty: true
-    environment:
-      - TZ=Asia/Tokyo
+    env_file: .env
     command: npm run dev
+    networks:
+      - default
 
   api:
     container_name: api
     build: ./docker/api
     ports:
       - 3000:3000
+      - 3001:3001
     volumes:
       - ./api:/api
     stdin_open: true
     tty: true
     environment:
-      - TZ=Asia/Tokyo
+      - MYSQL_HOST=db
+    env_file: .env
     command: npm run nodemon
-    # depends_on:
-    #   - mysql
+    expose:
+      - 3001
+    depends_on:
+      - db
+    networks:
+      - default
 
   db:
     container_name: db
@@ -34,15 +41,15 @@ services:
     image: mysql:8.0
     ports:
       - 3306:3306
-    environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      TZ: 'Asia/Tokyo'
+    env_file: .env
     volumes:
-      - ./db/conf/my.cnf:/etc/mysql/conf.d/my.cnfs
-      - ./db/mysql:/var/lib/mysql
+      - ./db/conf/my.cnf:/etc/mysql/conf.d/my.cnf
+      - mysql-data:/var/lib/mysql
+    networks:
+      - default
+
+networks:
+  default:
 
 volumes:
   mysql-data:
