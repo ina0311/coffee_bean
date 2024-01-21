@@ -1,11 +1,27 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import checker from 'vite-plugin-checker'
+import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  publicDir: false,
+  plugins: [
+    vue(),
+    checker({
+      vueTsc: true,
+    }),
+  ],
   server: {
-    host: true,
     port: 5173,
+    host: true
+  },
+  resolve: {
+    alias: [
+      {
+        find: '@',
+        replacement: path.resolve(__dirname, 'src')
+      }
+    ]
   }
 })

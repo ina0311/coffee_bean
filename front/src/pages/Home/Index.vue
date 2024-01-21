@@ -1,12 +1,11 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 </script>
 
 <template>
   <div>
-    <router-view />
+    <h1>Welcome to the Home page!</h1>
   </div>
 </template>
 
 <style scoped>
-
 </style>
