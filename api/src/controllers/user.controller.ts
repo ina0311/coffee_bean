@@ -3,9 +3,8 @@ import catchAsync from '../utils/catchAsync'
 import { Models } from '../models/index'
 
 export const getAllUser = catchAsync(async (req: Request, res: Response) => {
-  debugger
   const users = await Models.User.findAll()
-  res.status(200).json({ users })
+  res.status(200).json(users)
 })
 
 export const createUser = catchAsync(async (req, res) => {
