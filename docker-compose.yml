@@ -2,7 +2,9 @@ version: '3'
 services:
   front:
     container_name: front
-    build: ./docker/front
+    build:
+      context: .
+      dockerfile: ./docker/front/Dockerfile
     ports:
       - 5173:5173
     volumes:
@@ -16,7 +18,9 @@ services:
 
   api:
     container_name: api
-    build: ./docker/api
+    build:
+      context: .
+      dockerfile: ./docker/api/Dockerfile
     ports:
       - 3000:3000
       - 3001:3001
