@@ -2,11 +2,16 @@
 </script>
 
 <template>
-  <div>
+  <main>
     <router-view />
-  </div>
+  </main>
 </template>
 
-<style scoped>
-
+<style scoped lang="stylus">
+html, body
+  margin 0
+  padding 0
+  height 100%
+#app
+  min-height 100%
 </style>

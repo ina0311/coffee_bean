@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { apiClient } from '../../services/apiClient'
+import apiClient from '../../services/apiClient'
 const users = ref(null)
 
 const fetchUsers = async () => {

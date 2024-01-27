@@ -14,7 +14,10 @@ export default defineConfig({
   ],
   server: {
     port: 5173,
-    host: true
+    host: true,
+    hmr: {
+      overlay: true // ホットリロード時にエラーメッセージをオーバーレイ表示する
+    }
   },
   resolve: {
     alias: [

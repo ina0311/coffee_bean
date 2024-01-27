@@ -1,11 +1,15 @@
 <script lang="ts" setup>
+import Header from '@/components/common/Header.vue'
+import Footer from '@/components/common/Footer.vue'
 </script>
 
 <template>
   <div>
-    <h1>Welcome to the Home page!</h1>
+    <Header />
+    <Footer />
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="stylus">
+
 </style>
