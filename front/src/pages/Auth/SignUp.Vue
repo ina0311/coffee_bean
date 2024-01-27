@@ -23,7 +23,7 @@ const handleInput = (inputData: {value: string, formDataKey: string}) => {
 }
 
 const onSubmit = async () => {
-  const result = await apiClient.post('/auth/register', {
+  const result = await apiClient.post('/auth/signup', {
     username: formData.username,
     email: formData.email,
     password: encryptString(formData.password)
