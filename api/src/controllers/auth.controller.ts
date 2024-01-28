@@ -16,7 +16,14 @@ export const signin = catchAsync(async (req: Request, res: Response): Promise<vo
     res.status(httpStatus.UNAUTHORIZED).json({message: 'Incorrect email or password'})
     return
   }
+  const token = user.generateToken()
+
+  res.cookie('jwt', token, {
+    httpOnly: false,
+    secure: true,
+    sameSite: 'none', // クロスオリジンでも送信(corsで対応)
+    maxAge: 3600000
+  })
+
   res.status(httpStatus.OK).json({message: 'User logged in'})
-  // const token = user.generateToken()
-  // res.status(200).json({token})
 })
