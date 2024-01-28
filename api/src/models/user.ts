@@ -26,7 +26,8 @@ export default class User extends Model<InferAttributes<User>, InferCreationAttr
       },
       email: {
         type: DataTypes.STRING(128),
-        allowNull: false
+        allowNull: false,
+        unique: true
       },
       password: {
         type: DataTypes.STRING(128),
