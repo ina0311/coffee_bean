@@ -7,7 +7,6 @@ export const validateSignup = [
   body('password').isLength({ min: 8 }),
   (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req)
-    debugger
     if (!errors.isEmpty()) {
       return res.status(400).json({ error: errors.array()[0].msg })
     }
