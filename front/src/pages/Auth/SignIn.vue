@@ -10,7 +10,7 @@ import { typedSignInSchema } from '@/validates/auth'
 import { Form } from 'vee-validate'
 import { encryptString } from '@/utils/crypto'
 import axios from 'axios'
-// import router from '@/routes'
+import router from '@/routes'
 
 const formData = reactive({
   email: '',
@@ -33,6 +33,7 @@ const onSubmit = async () => {
     })
     console.log(result);
     formErrors.value = []
+    router.push({name: 'Profile'})
   } catch (err) {
     if (err instanceof axios.AxiosError) formErrors.value.push(err.response?.data.message)
   }

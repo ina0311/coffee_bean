@@ -18,6 +18,11 @@ const routes: RouteRecordRaw[] = [
     // props: route => ({status: route.params.status})
   },
   {
+    path: '/profile',
+    name: 'Profile',
+    component: () => import('@/pages/Profile/Index.vue')
+  },
+  {
     path: '/users',
     name: 'Users',
     component: () => import('@/pages/User/Index.vue')

@@ -11,5 +11,8 @@ router
   .route('/signin')
   .post(authValidate.validateSignIn, authController.signin)
 
+router
+  .route('/signout')
+  .post(authController.signOut)
 
 export default router

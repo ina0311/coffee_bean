@@ -27,3 +27,8 @@ export const signin = catchAsync(async (req: Request, res: Response): Promise<vo
 
   res.status(httpStatus.OK).json({message: 'User logged in'})
 })
+
+export const signOut = catchAsync(async (req: Request, res: Response) => {
+  res.clearCookie('jwt')
+  res.status(httpStatus.OK).json({message: 'User logged out'})
+})
