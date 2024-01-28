@@ -9,6 +9,10 @@ export default class User extends Model<InferAttributes<User>, InferCreationAttr
   public createdAt!: CreationOptional<Date>
   public updatedAt!: CreationOptional<Date>
 
+  public correctPassword(reqPassword: string): boolean {
+    return this.password === reqPassword
+  }
+
   // public static associate() {
   //   // associations can be defined here
   // }

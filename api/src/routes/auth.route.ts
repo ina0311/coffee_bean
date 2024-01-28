@@ -7,5 +7,9 @@ router
   .route('/signup')
   .post(authValidate.validateSignup, authController.signup)
 
+router
+  .route('/signin')
+  .post(authValidate.validateSignIn, authController.signin)
+
 
 export default router
