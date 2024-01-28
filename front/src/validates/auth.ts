@@ -7,6 +7,10 @@ const authSchema = z.object({
   password: z.string().min(8),
 })
 
-const typedAuthSchema = toTypedSchema(authSchema)
+const signInSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+})
 
-export default typedAuthSchema
+export const typedAuthSchema = toTypedSchema(authSchema)
+export const typedSignInSchema = toTypedSchema(signInSchema)

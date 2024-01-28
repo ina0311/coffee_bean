@@ -11,11 +11,12 @@ const routes: RouteRecordRaw[] = [
     name: 'Signup',
     component: () => import('@/pages/Auth/SignUp.vue')
   },
-  // {
-  //   path: '/sign-in',
-  //   name: 'SignIn',
-  //   component: () => import('@/pages/Auth/SignIn.vue')
-  // },
+  {
+    path: '/sign-in',
+    name: 'SignIn',
+    component: () => import('@/pages/Auth/SignIn.vue'),
+    // props: route => ({status: route.params.status})
+  },
   {
     path: '/users',
     name: 'Users',

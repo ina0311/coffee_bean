@@ -6,14 +6,13 @@ import SubmitButton from '@/components/form/SubmitButton.vue'
 import InputText from '@/components/form/InputText.vue'
 import ErrorMessage from '@/components/form/ErrorMessage.vue'
 import apiClient from '@/services/apiClient'
-import { typedAuthSchema } from '@/validates/auth'
+import { typedSignInSchema } from '@/validates/auth'
 import { Form } from 'vee-validate'
 import { encryptString } from '@/utils/crypto'
-import router from '@/routes'
 import axios from 'axios'
+// import router from '@/routes'
 
 const formData = reactive({
-  username: '',
   email: '',
   password: ''
 })
@@ -28,14 +27,12 @@ const handleInput = (inputData: {value: string, formDataKey: keyof typeof formDa
 
 const onSubmit = async () => {
   try {
-    const result = await apiClient.post('/auth/signup', {
-      username: formData.username,
+    const result = await apiClient.post('/auth/signin', {
       email: formData.email,
       password: encryptString(formData.password)
     })
+    console.log(result);
     formErrors.value = []
-    // @ts-ignore
-    router.push({name: 'SignIn', params: {status: result.status}})
   } catch (err) {
     if (err instanceof axios.AxiosError) formErrors.value.push(err.response?.data.message)
   }
@@ -45,18 +42,9 @@ const onSubmit = async () => {
 <template>
   <div>
     <Header />
-    <h1 class="is-size-1">ユーザー登録</h1>
-    <Form class="field" :validation-schema="typedAuthSchema" @submit="onSubmit" v-slot="{errors}">
+    <h1 class="is-size-1">サインイン</h1>
+    <Form class="field" :validation-schema="typedSignInSchema" @submit="onSubmit" v-slot="{errors}">
       <ErrorMessage :errorMessages="formErrors" />
-      <InputText
-        label="名前"
-        name="username"
-        type="text"
-        v-model="formData.username"
-        @change-input="handleInput"
-        :error="errors.username"
-      />
-
       <InputText
         label="メールアドレス"
         name="email"
@@ -78,7 +66,7 @@ const onSubmit = async () => {
 
       <SubmitButton
         type="submit"
-        buttonText="登録する"
+        buttonText="サインイン"
         :disabled="canNotSubmit || Object.keys(errors).length > 0"
       />
     </Form>
@@ -86,4 +74,5 @@ const onSubmit = async () => {
   </div>
 </template>
 
-<style scoped lang="stylus"></style>
+<style scoped>
+</style>
