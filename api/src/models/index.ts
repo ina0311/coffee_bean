@@ -1,6 +1,12 @@
 import {Sequelize} from 'sequelize'
 import process from 'process'
 import User from './user'
+import Store from './store'
+import Country from './country'
+import Farm from './farm'
+import CoffeeBean from './coffeeBean'
+import UserCoffeeBean from './userCoffeeBean'
+
 
 const sequelize = new Sequelize(
   process.env.MYSQL_DATABASE!,
@@ -16,14 +22,14 @@ const sequelize = new Sequelize(
 
 const models = {
   User: User.initialize(sequelize),
+  Store: Store.initialize(sequelize),
+  Country: Country.initialize(sequelize),
+  Farm: Farm.initialize(sequelize),
+  CoffeeBean: CoffeeBean.initialize(sequelize),
+  UserCoffeeBean: UserCoffeeBean.initialize(sequelize),
 } as const
 
-// Associateを定義することになったら書く
-// Object.keys(models).forEach((tableName: string) => {
-//   if (models[tableName].associate) {
-//     models[tableName].associate(models)
-//   }
-// })
+Object.values(models).forEach((model) => model.associate(models));
 
 console.log('db connection success')
 export default {

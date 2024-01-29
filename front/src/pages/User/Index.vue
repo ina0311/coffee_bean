@@ -5,7 +5,6 @@ const users = ref(null)
 
 const fetchUsers = async () => {
   const { data } = await apiClient.get('/users')
-  debugger
   users.value = data
 }
 
