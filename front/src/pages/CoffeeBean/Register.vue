@@ -2,27 +2,39 @@
 import {reactive, ref} from 'vue'
 import {Form} from 'vee-validate'
 import InputText from '@/components/form/InputText.vue'
+import InputSelect from '@/components/form/InputSelect.vue'
+import InputNumber from '@/components/form/InputNumber.vue'
 import InputCountryText from '@/components/coffeeBean/InputCountryText.vue'
-import inputFarmText from '@/components/coffeeBean/inputFarmText.vue'
 import SubmitButton from '@/components/form/SubmitButton.vue'
 import ErrorMessage from '@/components/form/ErrorMessage.vue'
 import router from '@/routes'
 import apiClient from '@/services/apiClient'
 import axios from 'axios'
 
-const coffeeBean = reactive({
+const coffeeBean = reactive<{
+  name: string
+  price: string
+  country: string
+  farm: string
+  roast: string
+  minAltitude: string
+  maxAltitude: string
+  flavor: string
+}>({
   name: '',
+  price: '',
   country: '',
   farm: '',
   roast: '',
+  minAltitude: '',
+  maxAltitude: '',
   flavor: '',
-  price: ''
 })
 
 const canNotSubmit = ref<boolean>(true)
 const formErrors = ref<string[]>([])
 const handleInput = (inputData: {value: string, formDataKey: keyof typeof coffeeBean}) => {
-  coffeeBean[inputData.formDataKey] = inputData.value
+  coffeeBean[inputData.formDataKey as keyof typeof coffeeBean] = inputData.value
   canNotSubmit.value = Object.keys(coffeeBean).some(key => coffeeBean[key as keyof typeof coffeeBean] === '')
 }
 
@@ -64,15 +76,7 @@ const onSubmit = async () => {
         @change-input="handleInput"
         :error="errors.country"
       />
-      <inputFarmText
-        label="Farm"
-        name="farm"
-        type="text"
-        v-model="coffeeBean.farm"
-        @change-input="handleInput"
-        :error="errors.farm"
-      />
-      <InputText
+      <InputSelect
         label="Roast"
         name="roast"
         type="text"
@@ -88,10 +92,35 @@ const onSubmit = async () => {
         @change-input="handleInput"
         :error="errors.flavor"
       />
-      <InputText
+      <div class="is-flex-direction-row">
+        <label class="label">Altitude</label>
+        <div class="is-flex">
+          <InputNumber
+            name="maxAltitude"
+            type="text"
+            label="max"
+            :maxlength="4"
+            v-model="coffeeBean.maxAltitude"
+            @change-input="handleInput"
+            :error="errors.maxAltitude"
+          />
+          <span class="mx-3">〜</span>
+          <InputNumber
+            name="minAltitude"
+            type="text"
+            label="min"
+            :maxlength="4"
+            v-model="coffeeBean.minAltitude"
+            @change-input="handleInput"
+            :error="errors.minAltitude"
+          />
+        </div>
+      </div>
+      <InputNumber
         label="Price"
         name="price"
         type="text"
+        :maxlength="6"
         v-model="coffeeBean.price"
         @change-input="handleInput"
         :error="errors.price"
