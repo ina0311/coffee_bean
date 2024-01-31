@@ -25,6 +25,8 @@ const signOut = async () => {
   }
 }
 
+const registerCoffeeBean = async () => router.push({name: 'CoffeeBeanRegister'})
+
 onMounted(() => fetchProfile())
 </script>
 
@@ -36,6 +38,9 @@ onMounted(() => fetchProfile())
     </div>
     <div>
       <button @click="signOut" type="button" class="button is-danger">サインアウト</button>
+    </div>
+    <div>
+      <button @click="registerCoffeeBean" type="button" class="button is-primary">コーヒー豆登録</button>
     </div>
   </div>
 </template>

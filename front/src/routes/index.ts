@@ -26,7 +26,17 @@ const routes: RouteRecordRaw[] = [
     path: '/users',
     name: 'Users',
     component: () => import('@/pages/User/Index.vue')
-  }
+  },
+  {
+    path: '/coffeeBeans/register',
+    name: 'CoffeeBeanRegister',
+    component: () => import('@/pages/CoffeeBean/Register.vue')
+  },
+  // {
+  //   path: '/coffeeBeans/:id',
+  //   name: 'CoffeeBeansShow',
+  //   component: () => import('@/pages/CoffeeBean/Show.vue')
+  // },
 ]
 
 const router = createRouter({
