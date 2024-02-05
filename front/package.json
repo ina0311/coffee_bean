@@ -10,15 +10,18 @@
     "lint": "npx eslint ./src/**/*.ts --ignore-path ./node_modules"
   },
   "dependencies": {
+    "@creativebulma/bulma-collapsible": "^1.0.4",
     "@vee-validate/zod": "^4.12.4",
     "@vueuse/core": "^10.7.2",
     "axios": "^1.6.5",
     "bulma": "^0.9.4",
     "crypto-js": "^4.2.0",
+    "radix-vue": "^1.4.0",
     "stylus": "^0.62.0",
     "stylus-loader": "^8.0.0",
     "vee-validate": "^4.12.4",
     "vue": "^3.3.11",
+    "vue-multiselect": "^3.0.0-beta.3",
     "vue-router": "^4.2.5",
     "vue-types": "^5.1.1",
     "zod": "^3.22.4"

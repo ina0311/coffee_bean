@@ -1,15 +1,17 @@
 <script setup lang="ts">
-import {reactive, ref} from 'vue'
+import {reactive, ref, provide} from 'vue'
 import {Form} from 'vee-validate'
 import InputText from '@/components/form/InputText.vue'
 import InputSelect from '@/components/form/InputSelect.vue'
 import InputNumber from '@/components/form/InputNumber.vue'
 import InputCountryText from '@/components/coffeeBean/InputCountryText.vue'
+import inputFlavorSelect from '@/components/coffeeBean/inputFlavorSelect.vue'
 import SubmitButton from '@/components/form/SubmitButton.vue'
 import ErrorMessage from '@/components/form/ErrorMessage.vue'
 import router from '@/routes'
 import apiClient from '@/services/apiClient'
 import axios from 'axios'
+import {ROAST_LEVEL} from '@/utils/constants.ts'
 
 const coffeeBean = reactive<{
   name: string
@@ -19,7 +21,7 @@ const coffeeBean = reactive<{
   roast: string
   minAltitude: string
   maxAltitude: string
-  flavor: string
+  flavors: string[]
 }>({
   name: '',
   price: '',
@@ -28,13 +30,28 @@ const coffeeBean = reactive<{
   roast: '',
   minAltitude: '',
   maxAltitude: '',
-  flavor: '',
+  flavors: [],
 })
 
 const canNotSubmit = ref<boolean>(true)
 const formErrors = ref<string[]>([])
-const handleInput = (inputData: {value: string, formDataKey: keyof typeof coffeeBean}) => {
-  coffeeBean[inputData.formDataKey as keyof typeof coffeeBean] = inputData.value
+provide('coffeeBean', coffeeBean)
+
+const handleInput = (inputData: {value: string, formDataKey: keyof Omit<typeof coffeeBean, 'flavors'>}) => {
+  const {value, formDataKey} = inputData
+
+  coffeeBean[formDataKey] = value
+  canNotSubmit.value = Object.keys(coffeeBean).some(key => coffeeBean[key as keyof typeof coffeeBean] === '')
+}
+
+const handleSelect = (inputData: {value: string, formDataKey: keyof Pick<typeof coffeeBean, 'flavors'>}) => {
+  debugger
+  const {value, formDataKey} = inputData
+  if (coffeeBean[formDataKey].some(flavor => flavor === value)) {
+    coffeeBean[formDataKey] = coffeeBean[formDataKey].filter(flavor => flavor !== value)
+  } else {
+    coffeeBean[formDataKey].push(value)
+  }
   canNotSubmit.value = Object.keys(coffeeBean).some(key => coffeeBean[key as keyof typeof coffeeBean] === '')
 }
 
@@ -44,7 +61,7 @@ const onSubmit = async () => {
       name: coffeeBean.name,
       country: coffeeBean.country,
       roast: coffeeBean.roast,
-      flavor: coffeeBean.flavor,
+      flavor: coffeeBean.flavors,
       price: coffeeBean.price
     })
     formErrors.value = []
@@ -64,7 +81,6 @@ const onSubmit = async () => {
         label="Name"
         name="name"
         type="text"
-        v-model="coffeeBean.name"
         @change-input="handleInput"
         :error="errors.name"
       />
@@ -72,7 +88,6 @@ const onSubmit = async () => {
         label="Country"
         name="country"
         type="text"
-        v-model="coffeeBean.country"
         @change-input="handleInput"
         :error="errors.country"
       />
@@ -80,17 +95,17 @@ const onSubmit = async () => {
         label="Roast"
         name="roast"
         type="text"
-        v-model="coffeeBean.roast"
+        :options="Object.values(ROAST_LEVEL)"
         @change-input="handleInput"
         :error="errors.roast"
       />
-      <InputText
+      <inputFlavorSelect
         label="Flavor"
-        name="flavor"
+        name="flavors"
         type="text"
-        v-model="coffeeBean.flavor"
-        @change-input="handleInput"
-        :error="errors.flavor"
+        :value="coffeeBean.flavors"
+        @change-input="handleSelect"
+        :error="errors.flavors"
       />
       <div class="is-flex-direction-row">
         <label class="label">Altitude</label>
@@ -100,7 +115,6 @@ const onSubmit = async () => {
             type="text"
             label="max"
             :maxlength="4"
-            v-model="coffeeBean.maxAltitude"
             @change-input="handleInput"
             :error="errors.maxAltitude"
           />
@@ -110,7 +124,6 @@ const onSubmit = async () => {
             type="text"
             label="min"
             :maxlength="4"
-            v-model="coffeeBean.minAltitude"
             @change-input="handleInput"
             :error="errors.minAltitude"
           />
@@ -121,7 +134,6 @@ const onSubmit = async () => {
         name="price"
         type="text"
         :maxlength="6"
-        v-model="coffeeBean.price"
         @change-input="handleInput"
         :error="errors.price"
       />
