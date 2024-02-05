@@ -12,7 +12,7 @@ import ErrorMessage from '@/components/form/ErrorMessage.vue'
 import router from '@/routes'
 import apiClient from '@/services/apiClient'
 import axios from 'axios'
-import {ROAST_LEVEL} from '@/utils/constants.ts'
+import {ROAST_LEVEL, PROCESS} from '@/utils/constants.ts'
 import {typedCoffeeBeanSchema} from '@/validates/coffeeBean'
 
 const coffeeBean = reactive<{
@@ -35,7 +35,6 @@ const coffeeBean = reactive<{
   storePlaceId: ''
 })
 
-const canNotSubmit = ref<boolean>(true)
 const formErrors = ref<string[]>([])
 provide('coffeeBean', coffeeBean)
 
@@ -43,7 +42,6 @@ const handleInput = (inputData: {value: string, formDataKey: keyof Omit<typeof c
   const {value, formDataKey} = inputData
 
   coffeeBean[formDataKey] = value
-  canNotSubmit.value = Object.keys(coffeeBean).some(key => coffeeBean[key as keyof typeof coffeeBean] === '')
 }
 
 const handleSelect = (inputData: {value: string, formDataKey: keyof Pick<typeof coffeeBean, 'flavors'>}) => {
@@ -54,12 +52,11 @@ const handleSelect = (inputData: {value: string, formDataKey: keyof Pick<typeof 
   } else {
     coffeeBean[formDataKey].push(value)
   }
-  canNotSubmit.value = Object.keys(coffeeBean).some(key => coffeeBean[key as keyof typeof coffeeBean] === '')
 }
 
 const onSubmit = async () => {
   try {
-    const result = await apiClient.post('/coffeebean/register', {
+    const result = await apiClient.post('/coffeeBean/register', {
       name: coffeeBean.name,
       country: coffeeBean.country,
       roast: coffeeBean.roast,
@@ -92,15 +89,23 @@ const onSubmit = async () => {
         type="text"
         @change-input="handleInput"
         :error="errors.storePlaceId"
-       />
-       <InputSelect
-         label="Roast"
-         name="roast"
-         type="text"
-         :options="Object.values(ROAST_LEVEL)"
-         @change-input="handleInput"
-         :error="errors.roast"
-       />
+      />
+      <InputSelect
+        label="Roast"
+        name="roast"
+        type="text"
+        :options="Object.values(ROAST_LEVEL)"
+        @change-input="handleInput"
+        :error="errors.roast"
+      />
+      <InputSelect
+        label="Process"
+        name="process"
+        type="text"
+        :options="Object.values(PROCESS)"
+        @change-input="handleInput"
+        :error="errors.process"
+      />
       <InputCountryText
         label="Country"
         name="country"
@@ -146,8 +151,10 @@ const onSubmit = async () => {
         @change-input="handleInput"
         :error="errors.price"
       />
-      <SubmitButton :disabled="canNotSubmit" />
-
+      <SubmitButton
+        buttonText="登録"
+        buttonType="submit"
+      />
     </Form>
   </div>
 </template>

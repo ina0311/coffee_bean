@@ -33,6 +33,41 @@ export const ROAST_LEVEL = {
   }
 }
 
+export const PROCESS = {
+  NATURAL: {
+    data: 'natural',
+    display: 'ナチュラル',
+  },
+  WASHED: {
+    data: 'washed',
+    display: 'ウォッシュド',
+  },
+  HONEY: {
+    data: 'honey',
+    display: 'ハニープロセス',
+  },
+  SEMI_WASHED: {
+    data: 'semiWashed',
+    display: 'セミウォッシュド',
+  },
+  PULPED_NATURAL: {
+    data: 'pulpedNatural',
+    display: 'パルプドナチュラル',
+  },
+  ANAEROBIC_NATURAL: {
+    data: 'anaerobicNatural',
+    display: 'アナエロビック・ナチュラル',
+  },
+  ANAEROBIC_WASHED: {
+    data: 'anaerobicWashed',
+    display: 'アナエロビック・ウォッシュド',
+  },
+  OTHER: {
+    data: 'other',
+    display: 'その他',
+  }
+}
+
 export type FLAVOR_TYPE = {
   "id": string,
   "ja": string,
