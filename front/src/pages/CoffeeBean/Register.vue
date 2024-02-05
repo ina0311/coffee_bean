@@ -6,31 +6,33 @@ import InputSelect from '@/components/form/InputSelect.vue'
 import InputNumber from '@/components/form/InputNumber.vue'
 import InputCountryText from '@/components/coffeeBean/InputCountryText.vue'
 import inputFlavorSelect from '@/components/coffeeBean/inputFlavorSelect.vue'
+import InputStore from '@/components/coffeeBean/InputStore.vue'
 import SubmitButton from '@/components/form/SubmitButton.vue'
 import ErrorMessage from '@/components/form/ErrorMessage.vue'
 import router from '@/routes'
 import apiClient from '@/services/apiClient'
 import axios from 'axios'
 import {ROAST_LEVEL} from '@/utils/constants.ts'
+import {typedCoffeeBeanSchema} from '@/validates/coffeeBean'
 
 const coffeeBean = reactive<{
   name: string
   price: string
   country: string
-  farm: string
   roast: string
   minAltitude: string
   maxAltitude: string
   flavors: string[]
+  storePlaceId: string
 }>({
   name: '',
+  roast: '',
   price: '',
   country: '',
-  farm: '',
-  roast: '',
   minAltitude: '',
   maxAltitude: '',
   flavors: [],
+  storePlaceId: ''
 })
 
 const canNotSubmit = ref<boolean>(true)
@@ -75,7 +77,7 @@ const onSubmit = async () => {
 <template>
   <div>
     <h1>Register Coffee Bean</h1>
-    <Form class="field" @submit="onSubmit" v-slot="{errors}">
+    <Form class="field" :validation-schema="typedCoffeeBeanSchema" @submit="onSubmit" v-slot="{errors}">
       <ErrorMessage :errorMessages="formErrors"/>
       <InputText
         label="Name"
@@ -84,20 +86,27 @@ const onSubmit = async () => {
         @change-input="handleInput"
         :error="errors.name"
       />
+      <InputStore
+        label="Store"
+        name="storePlaceId"
+        type="text"
+        @change-input="handleInput"
+        :error="errors.storePlaceId"
+       />
+       <InputSelect
+         label="Roast"
+         name="roast"
+         type="text"
+         :options="Object.values(ROAST_LEVEL)"
+         @change-input="handleInput"
+         :error="errors.roast"
+       />
       <InputCountryText
         label="Country"
         name="country"
         type="text"
         @change-input="handleInput"
         :error="errors.country"
-      />
-      <InputSelect
-        label="Roast"
-        name="roast"
-        type="text"
-        :options="Object.values(ROAST_LEVEL)"
-        @change-input="handleInput"
-        :error="errors.roast"
       />
       <inputFlavorSelect
         label="Flavor"
