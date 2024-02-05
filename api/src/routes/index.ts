@@ -3,6 +3,7 @@ const router = express.Router()
 import userRoute from './user.route'
 import authRoute from './auth.route'
 import profileRoute from './profile.route'
+import storeRoute from './store.route'
 
 const defaultRoutes: {path: string, route: any}[] = [
   {
@@ -17,6 +18,10 @@ const defaultRoutes: {path: string, route: any}[] = [
     path: '/profile',
     route: profileRoute,
   },
+  {
+    path: '/store',
+    route: storeRoute,
+  }
 ]
 
 defaultRoutes.forEach((route) => {
