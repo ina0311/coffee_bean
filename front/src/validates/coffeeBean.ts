@@ -3,14 +3,20 @@ import { toTypedSchema } from '@vee-validate/zod'
 
 const coffeeBeanSchema = z.object({
   name: z.string().min(3),
-  roast: z.number(),
-  storeId: z.number().optional(),
-  countryId: z.number().optional(),
-  farmId: z.number().optional(),
+  price: z.number(),
+  roast: z.string(),
+  storePlaceId: z.string().optional(),
+  country: z.object({
+    name: z.string().min(3),
+    japaneseName: z.string(),
+    alpha3Code: z.string().min(3).max(3),
+    flagImage: z.string(),
+    googleMapUrl: z.string(),
+  }).optional(),
   minAltitude: z.number().optional(),
   maxAltitude: z.number().optional(),
-  breedType: z.number().optional(),
-  process: z.number().optional(),
+  flavor: z.array(z.string()).optional(),
+  process: z.string().optional(),
 })
 
 const farmSchema = z.object({

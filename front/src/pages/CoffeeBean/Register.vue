@@ -18,21 +18,21 @@ import {typedCoffeeBeanSchema} from '@/validates/coffeeBean'
 const coffeeBean = reactive<{
   name: string
   price: string
-  country: string
-  roast: string
-  minAltitude: string
-  maxAltitude: string
+  country?: {}
+  roast?: string
+  minAltitude?: string
+  maxAltitude?: string
   flavors: string[]
-  storePlaceId: string
+  storePlaceId?: string
 }>({
   name: '',
-  roast: '',
   price: '',
-  country: '',
-  minAltitude: '',
-  maxAltitude: '',
+  roast: undefined,
+  storePlaceId: '',
+  country: undefined,
+  minAltitude: undefined,
+  maxAltitude: undefined,
   flavors: [],
-  storePlaceId: ''
 })
 
 const formErrors = ref<string[]>([])
@@ -45,7 +45,6 @@ const handleInput = (inputData: {value: string, formDataKey: keyof Omit<typeof c
 }
 
 const handleSelect = (inputData: {value: string, formDataKey: keyof Pick<typeof coffeeBean, 'flavors'>}) => {
-  debugger
   const {value, formDataKey} = inputData
   if (coffeeBean[formDataKey].some(flavor => flavor === value)) {
     coffeeBean[formDataKey] = coffeeBean[formDataKey].filter(flavor => flavor !== value)
@@ -58,16 +57,19 @@ const onSubmit = async () => {
   try {
     const result = await apiClient.post('/coffeeBean/register', {
       name: coffeeBean.name,
-      country: coffeeBean.country,
+      price: coffeeBean.price,
       roast: coffeeBean.roast,
+      storePlaceId: coffeeBean.storePlaceId,
+      country: coffeeBean.country,
+      minAltitude: coffeeBean.minAltitude,
+      maxAltitude: coffeeBean.maxAltitude,
       flavor: coffeeBean.flavors,
-      price: coffeeBean.price
     })
     formErrors.value = []
-    // @ts-ignore
     router.push({name: 'CoffeeBeanList', params: {status: result.status}})
   } catch (err) {
     if (err instanceof axios.AxiosError) formErrors.value.push(err.response?.data.message)
+    throw err
   }
 }
 </script>
@@ -83,12 +85,13 @@ const onSubmit = async () => {
         @change-input="handleInput"
         :error="errors.name"
       />
-      <InputStore
-        label="Store"
-        name="storePlaceId"
+      <InputNumber
+        label="Price"
+        name="price"
         type="text"
+        :maxlength="6"
         @change-input="handleInput"
-        :error="errors.storePlaceId"
+        :error="errors.price"
       />
       <InputSelect
         label="Roast"
@@ -97,6 +100,13 @@ const onSubmit = async () => {
         :options="Object.values(ROAST_LEVEL)"
         @change-input="handleInput"
         :error="errors.roast"
+      />
+      <InputStore
+        label="Store"
+        name="storePlaceId"
+        type="text"
+        @change-input="handleInput"
+        :error="errors.storePlaceId"
       />
       <InputSelect
         label="Process"
@@ -143,14 +153,6 @@ const onSubmit = async () => {
           />
         </div>
       </div>
-      <InputNumber
-        label="Price"
-        name="price"
-        type="text"
-        :maxlength="6"
-        @change-input="handleInput"
-        :error="errors.price"
-      />
       <SubmitButton
         buttonText="登録"
         buttonType="submit"
