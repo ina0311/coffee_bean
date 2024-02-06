@@ -5,6 +5,8 @@ export default class Store extends Model<InferAttributes<Store>, InferCreationAt
   public readonly id!: CreationOptional<number>
   public readonly name!: string
   public readonly placeId!: string
+  public readonly postalCode!: string
+  public readonly address!: string
   public readonly siteUrl?: string
   public readonly createdAt!: CreationOptional<Date>
   public readonly updatedAt!: CreationOptional<Date>
@@ -28,6 +30,14 @@ export default class Store extends Model<InferAttributes<Store>, InferCreationAt
         type: DataTypes.STRING,
         allowNull: false,
         unique: true
+      },
+      postalCode: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      address: {
+        type: DataTypes.TEXT,
+        allowNull: false
       },
       siteUrl: {
         type: DataTypes.TEXT,

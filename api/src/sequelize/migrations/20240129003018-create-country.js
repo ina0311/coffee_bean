@@ -14,7 +14,7 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-      placeId: {
+      japaneseName: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true,
@@ -23,6 +23,14 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true,
+      },
+      flagImage: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      googleMapUrl: {
+        type: Sequelize.TEXT,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

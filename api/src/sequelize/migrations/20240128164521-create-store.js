@@ -18,6 +18,14 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
+      postalCode: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      address: {
+        type: Sequelize.TEXT,
+        allowNull: false,
+      },
       siteUrl: {
         type: Sequelize.TEXT,
         allowNull: true,

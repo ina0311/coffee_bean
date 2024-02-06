@@ -4,9 +4,10 @@ import {Models as ModelsType} from './index'
 export default class coffeeBean extends Model<InferAttributes<coffeeBean>, InferCreationAttributes<coffeeBean>> {
   public readonly id!: CreationOptional<number>
   public readonly name!: string
-  public readonly storeId!: number
-  public readonly countryId!: number
-  public readonly farmId!: number
+  public readonly price!: number
+  public readonly storeId?: number
+  public readonly countryId?: number
+  public readonly farmId?: number
   public readonly minAltitude?: number
   public readonly maxAltitude?: number
   public readonly breedType?: number
@@ -42,27 +43,31 @@ export default class coffeeBean extends Model<InferAttributes<coffeeBean>, Infer
       },
       farmId: {
         type: DataTypes.INTEGER.UNSIGNED,
-        allowNull: false
+        allowNull: true
       },
       minAltitude: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         allowNull: true
       },
       maxAltitude: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         allowNull: true
       },
       breedType: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         allowNull: true
       },
       process: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         allowNull: true
       },
       roast: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         allowNull: true
+      },
+      price: {
+        type: DataTypes.INTEGER,
+        allowNull: false
       },
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,

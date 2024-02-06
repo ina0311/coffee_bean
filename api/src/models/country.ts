@@ -4,8 +4,10 @@ import { Models as ModelsType } from './index'
 export default class Country extends Model<InferAttributes<Country>, InferCreationAttributes<Country>> {
   public readonly id!: CreationOptional<number>
   public readonly name!: string
-  public readonly placeId!: string
+  public readonly japaneseName!: string
   public readonly isoCode!: string
+  public readonly flagImage!: string
+  public readonly googleMapUrl!: string
   public readonly createdAt!: CreationOptional<Date>
   public readonly updatedAt!: CreationOptional<Date>
 
@@ -26,15 +28,22 @@ export default class Country extends Model<InferAttributes<Country>, InferCreati
         type: DataTypes.STRING,
         allowNull: false
       },
-      placeId: {
+      japaneseName: {
         type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
+        allowNull: false
       },
       isoCode: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true
+      },
+      flagImage: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      googleMapUrl: {
+        type: DataTypes.STRING,
+        allowNull: false
       },
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,

@@ -21,3 +21,10 @@ export const textMapSearch = async (query: string) => {
   })
   return response.data
 }
+
+export const placeDetail = async (placeId: string) => {
+  const response = await googleMapClient.get('/details/json', {
+    params: {place_id: placeId},
+  })
+  return response.data
+}
