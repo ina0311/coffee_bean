@@ -55,7 +55,7 @@ const handleSelect = (inputData: {value: string, formDataKey: keyof Pick<typeof 
 
 const onSubmit = async () => {
   try {
-    const result = await apiClient.post('/coffeeBean/register', {
+    const result = await apiClient.post('/coffeeBeans/register', {
       name: coffeeBean.name,
       price: coffeeBean.price,
       roast: coffeeBean.roast,

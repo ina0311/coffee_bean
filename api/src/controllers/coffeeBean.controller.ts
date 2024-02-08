@@ -6,6 +6,15 @@ import * as StoreService from "../services/store.service"
 import * as CountryService from "../services/country.service"
 import httpStatus from 'http-status'
 
+export const findAll = catchAsync(async (req: Request, res: Response) => {
+  const coffeeBeans = await Models.CoffeeBean.findAll({
+    include: [
+      {model: Models.Store, as: 'store'},
+      {model: Models.Country, as: 'country'}
+    ]
+  })
+  res.status(httpStatus.OK).send(coffeeBeans)
+})
 
 export const create = catchAsync(async (req: Request, res: Response) => {
   const {storePlaceId, country, name, roast, process, minAltitude, maxAltitude, price} = req.body

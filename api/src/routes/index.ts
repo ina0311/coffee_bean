@@ -23,12 +23,12 @@ const defaultRoutes: {path: string, route: any, middleware?: any}[] = [
     middleware: authenticateToken,
   },
   {
-    path: '/store',
+    path: '/stores',
     route: storeRoute,
     middleware: authenticateToken,
   },
   {
-    path: '/coffeeBean',
+    path: '/coffeeBeans',
     route: coffeeBeanRoute,
     middleware: authenticateToken,
   },

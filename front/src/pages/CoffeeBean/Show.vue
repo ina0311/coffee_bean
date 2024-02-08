@@ -34,7 +34,7 @@ onMounted(async () => {
   const id = route.params.id
   if (!id) throw new Error('id is required')
 
-  const response = await apiClient.get(`/coffeeBean/${id}`)
+  const response = await apiClient.get(`/coffeeBeans/${id}`)
   coffeeBean.value = response.data
 })
 </script>

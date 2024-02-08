@@ -14,8 +14,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/sign-in',
     name: 'SignIn',
-    component: () => import('@/pages/Auth/SignIn.vue'),
-    // props: route => ({status: route.params.status})
+    component: () => import('@/pages/Auth/SignIn.vue')
   },
   {
     path: '/profile',
@@ -26,6 +25,11 @@ const routes: RouteRecordRaw[] = [
     path: '/users',
     name: 'Users',
     component: () => import('@/pages/User/Index.vue')
+  },
+  {
+    path: '/coffeeBeans',
+    name: 'CoffeeBeans',
+    component: () => import('@/pages/CoffeeBean/Index.vue')
   },
   {
     path: '/coffeeBeans/register',

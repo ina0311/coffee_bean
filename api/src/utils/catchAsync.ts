@@ -7,7 +7,7 @@ type AsyncFunction = (req: Request, res: Response, next: NextFunction) => Promis
 const catchAsync = (fn: AsyncFunction) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(fn(req, res, next)).catch((err) => {
     if (err.message = 'Validation error') {
-      // @ts-ignoredebugger
+      // @ts-ignore
       next(new ApiError(httpStatus.BAD_REQUEST, `${err.message}: ${err.errors}`, true))
     }
     next(new ApiError(httpStatus.INTERNAL_SERVER_ERROR, err.message, false, err.stack))

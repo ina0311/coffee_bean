@@ -68,7 +68,7 @@ const handleInput = useDebounceFn(async (event: Event) => {
   const target = event.target as HTMLInputElement
   if (target) {
     const value = target.value
-    const result = await apiClient.get(`/store/googleSearch?q=${value}`)
+    const result = await apiClient.get(`/stores/googleSearch?q=${value}`)
     stores.value = result.data.map((store: ResponseStore) => {
       return {
         name: store.name,
