@@ -1,4 +1,5 @@
 import { DataTypes, Model, type Sequelize, type InferCreationAttributes, type InferAttributes, type CreationOptional} from 'sequelize'
+import { Models as ModelTypes } from '../models'
 import jwt from 'jsonwebtoken'
 const JWT_SECRET = process.env.JWT_SECRET
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN
@@ -19,9 +20,10 @@ export default class User extends Model<InferAttributes<User>, InferCreationAttr
     return jwt.sign({id: this.id}, JWT_SECRET!, {algorithm: 'HS256', expiresIn: JWT_EXPIRES_IN!})
   }
 
-  // public static associate() {
-  //   // associations can be defined here
-  // }
+  public static associate(models: typeof ModelTypes) {
+    this.hasMany(models.UserCoffeeBean, {as: 'userCoffeeBeans', foreignKey: 'userId', sourceKey: 'id'})
+    this.belongsToMany(models.CoffeeBean, {as: 'coffeeBeans', through: models.UserCoffeeBean, foreignKey: 'userId', otherKey: 'coffeeBeanId', sourceKey: 'id'})
+  }
 
   public static initialize(sequelize: Sequelize) {
     this.init({
