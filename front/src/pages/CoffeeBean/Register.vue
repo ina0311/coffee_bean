@@ -66,7 +66,7 @@ const onSubmit = async () => {
       flavor: coffeeBean.flavors,
     })
     formErrors.value = []
-    router.push({name: 'CoffeeBeanList', params: {status: result.status}})
+    router.push({name: 'CoffeeBeanShow', params: {id: result.data.id}})
   } catch (err) {
     if (err instanceof axios.AxiosError) formErrors.value.push(err.response?.data.message)
     throw err

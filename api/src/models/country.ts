@@ -13,8 +13,6 @@ export default class Country extends Model<InferAttributes<Country>, InferCreati
 
   public static associate(models: typeof ModelsType) {
     this.hasMany(models.CoffeeBean, {as: 'coffeeBeans', foreignKey: 'countryId', sourceKey: 'id'})
-
-    this.belongsToMany(models.Farm, {as: 'farms', through: models.CoffeeBean, foreignKey: 'countryId', otherKey: 'farmId', sourceKey: 'id'})
   }
 
   public static initialize(sequelize: Sequelize) {

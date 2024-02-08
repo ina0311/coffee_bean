@@ -32,11 +32,11 @@ const routes: RouteRecordRaw[] = [
     name: 'CoffeeBeanRegister',
     component: () => import('@/pages/CoffeeBean/Register.vue')
   },
-  // {
-  //   path: '/coffeeBeans/:id',
-  //   name: 'CoffeeBeansShow',
-  //   component: () => import('@/pages/CoffeeBean/Show.vue')
-  // },
+  {
+    path: '/coffeeBeans/:id',
+    name: 'CoffeeBeanShow',
+    component: () => import('@/pages/CoffeeBean/Show.vue')
+  },
 ]
 
 const router = createRouter({

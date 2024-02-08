@@ -1,5 +1,5 @@
 import axios from 'axios'
-const GOOGLE_MAP_API_KEY = process.env.GOOGLE_MAP_API_KEY
+const GOOGLE_MAP_API_KEY = process.env.VITE_GOOGLE_MAP_API_KEY
 
 const GOOGLE_MAP_API_URL = 'https://maps.googleapis.com/maps/api/place'
 

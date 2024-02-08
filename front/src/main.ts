@@ -7,12 +7,7 @@ import '@creativebulma/bulma-collapsible'
 const app = createApp(App)
 
 app.config.errorHandler = (err, vm, info) => {
-  // ここでエラーを処理します
-  // `err` はエラーオブジェクト
-  // `vm` はエラーが発生したコンポーネントのインスタンス
-  // `info` はエラーが発生したVue特有のエラー情報 (例: ライフサイクルフック名)
-  // @ts-ignore
-  console.error(`Error: ${err.toString()}\nInfo: ${info}, \nComponent: ${vm}`);
+  console.error(`Error: ${err?.toString()}\nInfo: ${info}, \nComponent: ${JSON.stringify(vm)}`);
 };
 
 app.use(router).mount('#app')

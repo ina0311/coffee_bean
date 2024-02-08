@@ -18,6 +18,14 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
+      latitude: {
+        type: Sequelize.DECIMAL(10, 8),
+        allowNull: false,
+      },
+      longitude: {
+        type: Sequelize.DECIMAL(11, 8),
+        allowNull: false,
+      },
       postalCode: {
         type: Sequelize.STRING,
         allowNull: false,

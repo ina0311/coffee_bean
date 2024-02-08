@@ -35,6 +35,10 @@ const defaultRoutes: {path: string, route: any, middleware?: any}[] = [
 ]
 
 defaultRoutes.forEach((route) => {
+  if (route.middleware) {
+    router.use(route.path, route.middleware, route.route)
+    return
+  }
   router.use(route.path, route.route)
 })
 
