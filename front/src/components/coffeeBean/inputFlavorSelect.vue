@@ -39,14 +39,16 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref } from 'vue'
+import { defineProps, ref, onMounted } from 'vue'
 import { Field } from 'vee-validate'
-import { FLAVOR_LIST, FLAVOR_TYPE } from '@/utils/constants'
+// import { FLAVOR_LIST, FLAVOR_TYPE } from '@/utils/constants'
 import { Combobox } from 'radix-vue/namespaced'
 import FlavorItem from './FlavorItem.vue'
+import apiClient from '@/services/apiClient'
 
-const flavorOptions = ref<(FLAVOR_TYPE & { checked: boolean })[]>(FLAVOR_LIST.map(option => ({ ...option, checked: false })))
-const parentFlavorOptions = flavorOptions.value.filter(option => option.parentId === null)
+// const flavorOptions = ref<(FLAVOR_TYPE & { checked: boolean })[]>(FLAVOR_LIST.map(option => ({ ...option, checked: false })))
+const flavorOptions = ref<any[]>([])
+const parentFlavorOptions = ref<any[]>([])
 const fieldValue = ref<string>("")
 
 const isShowDropDown = ref<boolean>(false)
@@ -66,7 +68,7 @@ const props = defineProps({
     required: true
   },
   value: {
-    type: Array as () => string[],
+    type: Array as () => string[] | number[],
     default: []
   },
   placeholder: {
@@ -81,6 +83,12 @@ const props = defineProps({
     type: String,
     default: ""
   },
+})
+
+onMounted(async () => {
+  const result = await apiClient.get('/flavors')
+  flavorOptions.value = result.data.map((option: any) => ({ ...option, checked: false }))
+  parentFlavorOptions.value = flavorOptions.value.filter((option: any) => option.parentId === null)
 })
 
 </script>

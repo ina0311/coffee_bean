@@ -15,4 +15,8 @@ router
   .route('/register')
   .post(coffeeBeanValidate.validateCoffeeBean, coffeeBeanController.create)
 
+router
+  .route('/:id/reviews')
+  .post(coffeeBeanController.createReview)
+  
 export default router

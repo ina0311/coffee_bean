@@ -21,8 +21,8 @@ const formData = reactive({
 const canNotSubmit = ref<boolean>(true)
 const formErrors = ref<string[]>([])
 
-const handleInput = (inputData: {value: string, formDataKey: keyof typeof formData}) => {
-  formData[inputData.formDataKey] = inputData.value
+const handleInput = (value: string, formDataKey: keyof typeof formData) => {
+  formData[formDataKey] = value
   canNotSubmit.value = Object.keys(formData).some(key => formData[key as keyof typeof formData] === '')
 }
 
@@ -53,7 +53,7 @@ const onSubmit = async () => {
         name="username"
         type="text"
         v-model="formData.username"
-        @change-input="handleInput"
+        :handleInput="handleInput"
         :error="errors.username"
       />
 
@@ -63,7 +63,7 @@ const onSubmit = async () => {
         type="email"
         placeholder='example@email.com'
         v-model="formData.email"
-        @change-input="handleInput"
+        :handleInput="handleInput"
         :error="errors.email"
       />
 
@@ -72,7 +72,7 @@ const onSubmit = async () => {
         name="password"
         type="password"
         v-model="formData.password"
-        @change-input="handleInput"
+        :handleInput="handleInput"
         :error="errors.password"
       />
 

@@ -15,7 +15,6 @@ const coffeeBeanSchema = z.object({
   }).optional(),
   minAltitude: z.number().optional(),
   maxAltitude: z.number().optional(),
-  flavor: z.array(z.string()).optional(),
   process: z.string().optional(),
 })
 

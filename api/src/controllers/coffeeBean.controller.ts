@@ -1,10 +1,13 @@
 import type { Request, Response } from 'express'
+import httpStatus from 'http-status'
 import { Models } from '../models/index'
 import catchAsync from '../utils/catchAsync'
-// import * as coffeeBeanService from "../services/"
-import * as StoreService from "../services/store.service"
-import * as CountryService from "../services/country.service"
-import httpStatus from 'http-status'
+import {
+  coffeeBeanService,
+  storeService,
+  countryService,
+} from "../services"
+import type { LoggedRequest } from 'src/middlewares/authenticate'
 
 export const findAll = catchAsync(async (req: Request, res: Response) => {
   const coffeeBeans = await Models.CoffeeBean.findAll({
@@ -18,8 +21,8 @@ export const findAll = catchAsync(async (req: Request, res: Response) => {
 
 export const create = catchAsync(async (req: Request, res: Response) => {
   const {storePlaceId, country, name, roast, process, minAltitude, maxAltitude, price} = req.body
-  const store = await StoreService.findOrCreate(storePlaceId)
-  const countryInstance = await CountryService.findOrCreate(country)
+  const store = await storeService.findOrCreate(storePlaceId)
+  const countryInstance = await countryService.findOrCreate(country)
   const coffeeBean = await Models.CoffeeBean.create({
     name,
     roast,
@@ -43,10 +46,39 @@ export const findOneById = catchAsync(async (req: Request, res: Response) => {
         {model: Models.Country, as: 'country'}
       ]
     }
-  )
+  ).catch((e) => {
+    console.error(e)
+  })
   if (!coffeeBean) {
     res.status(httpStatus.NOT_FOUND).send('Not found')
     return
   }
   res.status(httpStatus.OK).send(coffeeBean)
+})
+
+export const createReview = catchAsync(async (req: LoggedRequest, res: Response) => {
+  const userId = req.userId!
+  const coffeeBeanId = req.params.id
+  const {coffeeStyle, total, acidity, bitterness, body, afterTaste, describe} = req.body
+  const userBean = await coffeeBeanService.userCoffeeBeanFindOrCreate(userId, +coffeeBeanId)
+  if (!userBean) {
+    res.status(httpStatus.NOT_FOUND).send('Not found')
+    return
+  }
+
+  const review = await Models.Review.create({
+    userBeanId: userBean.id,
+    coffeeStyle,
+    total,
+    acidity,
+    bitterness,
+    body,
+    afterTaste,
+    describe
+  }).catch((e) => {
+    debugger
+    console.error(e)
+  })
+  
+  res.status(httpStatus.CREATED).send(review)
 })

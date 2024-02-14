@@ -5,6 +5,7 @@ import authRoute from './auth.route'
 import profileRoute from './profile.route'
 import storeRoute from './store.route'
 import coffeeBeanRoute from './coffeeBean.route'
+import flavorRoute from './flavor.route'
 
 import authenticateToken from '../middlewares/authenticate'
 
@@ -30,6 +31,11 @@ const defaultRoutes: {path: string, route: any, middleware?: any}[] = [
   {
     path: '/coffeeBeans',
     route: coffeeBeanRoute,
+    middleware: authenticateToken,
+  },
+  {
+    path: '/flavors',
+    route: flavorRoute,
     middleware: authenticateToken,
   },
 ]

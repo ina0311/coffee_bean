@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import {reactive, ref, provide} from 'vue'
+import {reactive, ref} from 'vue'
 import {Form} from 'vee-validate'
 import InputText from '@/components/form/InputText.vue'
 import InputSelect from '@/components/form/InputSelect.vue'
 import InputNumber from '@/components/form/InputNumber.vue'
 import InputCountryText from '@/components/coffeeBean/InputCountryText.vue'
-import inputFlavorSelect from '@/components/coffeeBean/inputFlavorSelect.vue'
 import InputStore from '@/components/coffeeBean/InputStore.vue'
 import SubmitButton from '@/components/form/SubmitButton.vue'
 import ErrorMessage from '@/components/form/ErrorMessage.vue'
@@ -22,7 +21,6 @@ const coffeeBean = reactive<{
   roast?: string
   minAltitude?: string
   maxAltitude?: string
-  flavors: string[]
   storePlaceId?: string
 }>({
   name: '',
@@ -32,25 +30,14 @@ const coffeeBean = reactive<{
   country: undefined,
   minAltitude: undefined,
   maxAltitude: undefined,
-  flavors: [],
 })
 
 const formErrors = ref<string[]>([])
-provide('coffeeBean', coffeeBean)
 
 const handleInput = (inputData: {value: string, formDataKey: keyof Omit<typeof coffeeBean, 'flavors'>}) => {
   const {value, formDataKey} = inputData
 
   coffeeBean[formDataKey] = value
-}
-
-const handleSelect = (inputData: {value: string, formDataKey: keyof Pick<typeof coffeeBean, 'flavors'>}) => {
-  const {value, formDataKey} = inputData
-  if (coffeeBean[formDataKey].some(flavor => flavor === value)) {
-    coffeeBean[formDataKey] = coffeeBean[formDataKey].filter(flavor => flavor !== value)
-  } else {
-    coffeeBean[formDataKey].push(value)
-  }
 }
 
 const onSubmit = async () => {
@@ -63,7 +50,6 @@ const onSubmit = async () => {
       country: coffeeBean.country,
       minAltitude: coffeeBean.minAltitude,
       maxAltitude: coffeeBean.maxAltitude,
-      flavor: coffeeBean.flavors,
     })
     formErrors.value = []
     router.push({name: 'CoffeeBeanShow', params: {id: result.data.id}})
@@ -82,7 +68,7 @@ const onSubmit = async () => {
         label="Name"
         name="name"
         type="text"
-        @change-input="handleInput"
+        :handleInput="handleInput"
         :error="errors.name"
       />
       <InputNumber
@@ -122,14 +108,6 @@ const onSubmit = async () => {
         type="text"
         @change-input="handleInput"
         :error="errors.country"
-      />
-      <inputFlavorSelect
-        label="Flavor"
-        name="flavors"
-        type="text"
-        :value="coffeeBean.flavors"
-        @change-input="handleSelect"
-        :error="errors.flavors"
       />
       <div class="is-flex-direction-row">
         <label class="label">Altitude</label>

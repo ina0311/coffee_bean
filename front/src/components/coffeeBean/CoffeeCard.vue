@@ -11,12 +11,8 @@ const props = defineProps({
 })
 
 const navigateCoffeeBeanShow = () => router.push({name: 'CoffeeBeanShow', params: {id: props.coffeeBean.id}})
+const navigateReview = () => router.push({name: 'ReviewCreate', params: {id: props.coffeeBean.id}})
 
-
-const navigateReview = () => {
-  router.push({name: 'ReviewCreate', params: {coffeeBeanId: props.coffeeBean.id}})
-  console.log('navigateReview')
-}
 </script>
 
 <template>

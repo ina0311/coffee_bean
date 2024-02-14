@@ -6,7 +6,7 @@
           type="checkbox"
           v-model="props.flavor.checked"
           :id="flavor.id"
-          @change="handleCheckboxChange(flavor.id)"
+          @change="handleCheckboxChange(flavor.origin)"
         />
         <p>
           {{ `${flavor.ja}(${flavor.en})` }}
@@ -22,7 +22,7 @@
           v-for="childFlavor in childFlavors"
           :flavor="childFlavor"
           :flavorList="flavorList"
-          :id="childFlavor.id"
+          :id="childFlavor.origin"
         />
       </Collapsible.Content>
     </Collapsible.Root>
@@ -32,19 +32,17 @@
 <script setup lang="ts">
 import { defineProps, computed, ref, inject } from 'vue'
 import { Collapsible } from 'radix-vue/namespaced'
-import type { FLAVOR_TYPE } from '@/utils/constants'
-type FLAVOR_TYPE_OPTIONS = FLAVOR_TYPE & { checked: boolean }
-const coffeeBean: {[key: string]: string | string[], flavors: string[]} = inject('coffeeBean')!
-const selectedFlavors = coffeeBean.flavors
+const review: {[key: string]: string | string[], flavors: string[]} = inject('review')!
+const selectedFlavors = review.flavors
 
 const open = ref<boolean>(false)
 const props = defineProps({
   flavor: {
-    type: Object as () => FLAVOR_TYPE_OPTIONS,
+    type: Object as () => any,
     required: true
   },
   flavorList: {
-    type: Array as () => FLAVOR_TYPE_OPTIONS[],
+    type: Array as () => any[],
     required: true
   }
 })

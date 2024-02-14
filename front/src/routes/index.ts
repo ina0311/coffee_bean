@@ -22,11 +22,6 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/pages/Profile/Index.vue')
   },
   {
-    path: '/users',
-    name: 'Users',
-    component: () => import('@/pages/User/Index.vue')
-  },
-  {
     path: '/coffeeBeans',
     name: 'CoffeeBeans',
     component: () => import('@/pages/CoffeeBean/Index.vue')
@@ -40,6 +35,16 @@ const routes: RouteRecordRaw[] = [
     path: '/coffeeBeans/:id',
     name: 'CoffeeBeanShow',
     component: () => import('@/pages/CoffeeBean/Show.vue')
+  },
+  {
+    path: '/coffeeBeans/:id/reviews',
+    name: 'Reviews',
+    component: () => import('@/pages/Review/Index.vue')
+  },
+  {
+    path: '/coffeeBeans/:id/reviews/register',
+    name: 'ReviewRegister',
+    component: () => import('@/pages/Review/Register.vue')
   },
 ]
 
