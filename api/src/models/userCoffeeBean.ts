@@ -12,21 +12,22 @@ export default class UserCoffeeBean extends Model<InferAttributes<UserCoffeeBean
   public static associate(models: typeof ModelsType) {
     this.belongsTo(models.User, {as: 'user', foreignKey: 'userId', targetKey: 'id'})
     this.belongsTo(models.CoffeeBean, {as: 'coffeeBean', foreignKey: 'coffeeBeanId', targetKey: 'id'})
+    // this.belongsToMany(models.Flavor, {as: 'flavor', through: models.UserBeanFlavor, foreignKey: 'userBeanId', otherKey: 'flavorId', sourceKey: 'id'})
   }
 
   public static initialize(sequelize: Sequelize) {
     this.init({
       id: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
       },
       userId: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         allowNull: false
       },
       coffeeBeanId: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         allowNull: false
       },
       imageUrls: {
@@ -37,7 +38,7 @@ export default class UserCoffeeBean extends Model<InferAttributes<UserCoffeeBean
       updatedAt: DataTypes.DATE,
     },
     {
-      tableName: 'countries',
+      tableName: 'userCoffeeBeans',
       modelName: 'UserCoffeeBean',
       sequelize
     })
