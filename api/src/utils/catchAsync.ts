@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from 'express'
 import httpStatus from 'http-status'
 import ApiError from './apiError'
+import { LoggedRequest } from 'src/middlewares/authenticate'
 
-type AsyncFunction = (req: Request, res: Response, next: NextFunction) => Promise<void>
+type AsyncFunction = (req: Request | LoggedRequest, res: Response, next: NextFunction) => Promise<void>
 
-const catchAsync = (fn: AsyncFunction) => (req: Request, res: Response, next: NextFunction) => {
+const catchAsync = (fn: AsyncFunction) => (req: Request | LoggedRequest, res: Response, next: NextFunction) => {
   Promise.resolve(fn(req, res, next)).catch((err) => {
     if (err.message = 'Validation error') {
       // @ts-ignore

@@ -17,6 +17,11 @@ router
 
 router
   .route('/:id/reviews')
+  .get(coffeeBeanController.findAllReviews)
   .post(coffeeBeanController.createReview)
-  
+
+router
+  .route('/:id/reviews/:reviewId')
+  .get(coffeeBeanController.findReview)
+
 export default router

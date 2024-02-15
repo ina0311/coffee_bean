@@ -26,7 +26,8 @@ export default class Review extends Model<InferAttributes<Review>, InferCreation
   public readonly updatedAt!: CreationOptional<Date>
 
   public static associate(models: typeof ModelsType) {
-    // this.hasMany(models.CoffeeBean, {as: 'coffeeBeans', foreignKey: 'flavorId', sourceKey: 'id'})
+    this.hasMany(models.UserCoffeeBean, {as: 'userCoffeeBeans', foreignKey: 'userId', sourceKey: 'id'})
+    this.belongsToMany(models.CoffeeBean, {as: 'coffeeBean', through: models.UserCoffeeBean, foreignKey: 'userId', otherKey: 'coffeeBeanId', sourceKey: 'id'})
   }
 
   public static initialize(sequelize: Sequelize) {

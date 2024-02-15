@@ -4,18 +4,18 @@
     <input
       :type="props.type"
       v-model="field.value"
-      @input="handleInput"
+      @input="props.handleInput(field.value, props.name)"
       :placeholder="placeholder"
       :class="{ 'is-invalid': errors.length }"
       v-bind="field"
+      :maxlength="props.maxlength"
     />
     <ErrorMessage :name="props.name" class="help is-danger" />
   </Field>
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue'
-import { useDebounceFn } from '@vueuse/core'
+import { defineProps} from 'vue'
 import { Field, ErrorMessage } from 'vee-validate'
 
 const props = defineProps({
@@ -42,15 +42,14 @@ const props = defineProps({
   rules: {
     type: String,
     default: ""
+  },
+  maxlength: {
+    type: Number,
+    default: 10
+  },
+  handleInput: {
+    type: Function,
+    default: () => {}
   }
 })
-
-const emit = defineEmits(['change-input'])
-
-const handleInput = useDebounceFn((event: Event) => {
-  const target = event.target as HTMLInputElement
-  if (target) {
-    emit('change-input', {value: target.value, formDataKey: props.name})
-  }
-}, 800)
 </script>

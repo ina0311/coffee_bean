@@ -56,6 +56,32 @@ export const findOneById = catchAsync(async (req: Request, res: Response) => {
   res.status(httpStatus.OK).send(coffeeBean)
 })
 
+export const findAllReviews = catchAsync(async (req: LoggedRequest, res: Response) => {
+  const userId = req.userId!
+  const coffeeBeanId = req.params.id
+  const coffeeBean = await Models.CoffeeBean.findByPk(coffeeBeanId)
+  const reviews = await Models.Review.findAll({
+    include: [
+      {
+        model: Models.CoffeeBean,
+        as: 'coffeeBean',
+        where: {
+          id: coffeeBeanId
+        }
+      },
+      {
+        model: Models.UserCoffeeBean,
+        as: 'userCoffeeBeans',
+        where: {
+          userId
+        }
+      }
+    ]
+  })
+
+  res.status(httpStatus.OK).send({reviews, coffeeBean})
+})
+
 export const createReview = catchAsync(async (req: LoggedRequest, res: Response) => {
   const userId = req.userId!
   const coffeeBeanId = req.params.id
@@ -75,10 +101,41 @@ export const createReview = catchAsync(async (req: LoggedRequest, res: Response)
     body,
     afterTaste,
     describe
-  }).catch((e) => {
-    debugger
-    console.error(e)
   })
-  
   res.status(httpStatus.CREATED).send(review)
+})
+
+export const findReview = catchAsync(async (req: LoggedRequest, res: Response) => {
+  const userId = req.userId!
+  const coffeeBeanId = req.params.id
+  const reviewId = req.params.reviewId
+  debugger
+  const coffeeBean = await Models.CoffeeBean.findByPk(coffeeBeanId)
+  const review = await Models.Review.findOne({
+    include: [
+      {
+        model: Models.CoffeeBean,
+        as: 'coffeeBean',
+        where: {
+          id: coffeeBeanId
+        }
+      },
+      {
+        model: Models.UserCoffeeBean,
+        as: 'userCoffeeBeans',
+        where: {
+          userId
+        }
+      }
+    ],
+    where: {
+      id: reviewId
+    }
+  })
+
+  if (!review) {
+    res.status(httpStatus.NOT_FOUND).send('Not found')
+    return
+  }
+  res.status(httpStatus.OK).send({review, coffeeBean})
 })

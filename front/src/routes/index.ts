@@ -46,6 +46,11 @@ const routes: RouteRecordRaw[] = [
     name: 'ReviewRegister',
     component: () => import('@/pages/Review/Register.vue')
   },
+  {
+    path: '/coffeeBeans/:id/reviews/:reviewId',
+    name: 'ReviewShow',
+    component: () => import('@/pages/Review/Show.vue')
+  },
 ]
 
 const router = createRouter({
