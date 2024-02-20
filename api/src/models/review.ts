@@ -24,10 +24,12 @@ export default class Review extends Model<InferAttributes<Review>, InferCreation
   public readonly describe?: string
   public readonly createdAt!: CreationOptional<Date>
   public readonly updatedAt!: CreationOptional<Date>
+  public readonly userCoffeeBeans?: typeof ModelsType.UserCoffeeBean[]
+  public readonly coffeeBean?: typeof ModelsType.CoffeeBean
 
   public static associate(models: typeof ModelsType) {
-    this.hasMany(models.UserCoffeeBean, {as: 'userCoffeeBeans', foreignKey: 'userId', sourceKey: 'id'})
-    this.belongsToMany(models.CoffeeBean, {as: 'coffeeBean', through: models.UserCoffeeBean, foreignKey: 'userId', otherKey: 'coffeeBeanId', sourceKey: 'id'})
+    this.belongsTo(models.UserCoffeeBean, {as: 'userCoffeeBeans', foreignKey: 'userBeanId', targetKey: 'id'})
+    this.belongsToMany(models.Flavor, {as: 'flavors', through: 'ReviewFlavor', foreignKey: 'reviewId', otherKey: 'flavorId', targetKey: 'id'})
   }
 
   public static initialize(sequelize: Sequelize) {

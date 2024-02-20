@@ -12,7 +12,7 @@ export default class Flavor extends Model<InferAttributes<Flavor>, InferCreation
   public readonly updatedAt!: CreationOptional<Date>
 
   public static associate(models: typeof ModelsType) {
-    // this.belongsToMany(models.UserCoffeeBean, {as: 'userCoffeeBean', through: models.UserBeanFlavor, foreignKey: 'flavorId', otherKey: 'userBeanCoffeeId', sourceKey: 'id'})
+    this.belongsToMany(models.Review, {as: 'reviews', through: models.ReviewFlavor, foreignKey: 'flavorId', otherKey: 'reviewId', sourceKey: 'id'})
   }
 
   public static initialize(sequelize: Sequelize) {

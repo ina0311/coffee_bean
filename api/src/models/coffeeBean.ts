@@ -19,6 +19,7 @@ export default class coffeeBean extends Model<InferAttributes<coffeeBean>, Infer
   public static associate(models: typeof ModelsType) {
     this.belongsTo(models.Store, {as: 'store', foreignKey: 'storeId', targetKey: 'id'})
     this.belongsTo(models.Country, {as: 'country', foreignKey: 'countryId', targetKey: 'id'})
+    this.hasMany(models.UserCoffeeBean, {as: 'userCoffeeBeans', foreignKey: 'coffeeBeanId', sourceKey: 'id'})
   }
 
   public static initialize(sequelize: Sequelize) {

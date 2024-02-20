@@ -12,7 +12,7 @@ export default class UserCoffeeBean extends Model<InferAttributes<UserCoffeeBean
   public static associate(models: typeof ModelsType) {
     this.belongsTo(models.User, {as: 'user', foreignKey: 'userId', targetKey: 'id'})
     this.belongsTo(models.CoffeeBean, {as: 'coffeeBean', foreignKey: 'coffeeBeanId', targetKey: 'id'})
-    // this.belongsToMany(models.Flavor, {as: 'flavor', through: models.UserBeanFlavor, foreignKey: 'userBeanId', otherKey: 'flavorId', sourceKey: 'id'})
+    this.hasMany(models.Review, {as: 'reviews', foreignKey: 'userBeanId', sourceKey: 'id'})
   }
 
   public static initialize(sequelize: Sequelize) {
