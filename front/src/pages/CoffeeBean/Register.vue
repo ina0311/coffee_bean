@@ -84,7 +84,7 @@ const onSubmit = async () => {
         name="roast"
         type="text"
         :options="Object.values(ROAST_LEVEL)"
-        @change-input="handleInput"
+        :handleInput="handleInput"
         :error="errors.roast"
       />
       <InputStore
@@ -99,7 +99,7 @@ const onSubmit = async () => {
         name="process"
         type="text"
         :options="Object.values(PROCESS)"
-        @change-input="handleInput"
+        :handleInput="handleInput"
         :error="errors.process"
       />
       <InputCountryText

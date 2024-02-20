@@ -30,6 +30,7 @@ onMounted(async () => {
     <p>{{ review.body }}</p>
     <p>{{ review.afterTaste }}</p>
     <p>{{ review.describe }}</p>
+    <p v-for="flavor of review.flavors">{{ flavor.ja }}</p>
   </div>
   <button type="button" class="button is-primary" @click="router.push(`/coffeeBeans/${coffeeBean.id}/reviews`)">一覧に戻る</button>
 </div>

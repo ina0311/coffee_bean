@@ -4,12 +4,13 @@
       <div>
         <input
           type="checkbox"
-          v-model="props.flavor.checked"
-          :id="flavor.id"
-          @change="handleCheckboxChange(flavor.origin)"
+          :value="props.flavor.checked"
+          :checked="props.flavor.checked"
+          :id="props.flavor.id"
+          @change="props.handleInput(props.flavor.id)"
         />
         <p>
-          {{ `${flavor.ja}(${flavor.en})` }}
+          {{ `${props.flavor.ja}(${props.flavor.en})` }}
         </p>
         <Collapsible.Trigger v-if="childFlavors.length > 0">
           <span class="icon is-small is-right">
@@ -21,8 +22,9 @@
         <FlavorItem
           v-for="childFlavor in childFlavors"
           :flavor="childFlavor"
-          :flavorList="flavorList"
+          :flavorList="props.flavorList"
           :id="childFlavor.origin"
+          :handleInput="props.handleInput"
         />
       </Collapsible.Content>
     </Collapsible.Root>
@@ -30,10 +32,8 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, computed, ref, inject } from 'vue'
+import { defineProps, ref } from 'vue'
 import { Collapsible } from 'radix-vue/namespaced'
-const review: {[key: string]: string | string[], flavors: string[]} = inject('review')!
-const selectedFlavors = review.flavors
 
 const open = ref<boolean>(false)
 const props = defineProps({
@@ -44,18 +44,12 @@ const props = defineProps({
   flavorList: {
     type: Array as () => any[],
     required: true
+  },
+  handleInput: {
+    type: Function,
+    required: true
   }
 })
 
-const childFlavors = computed(() => {
-  return props.flavorList.filter(f => f.parentId === props.flavor.id);
-})
-
-const handleCheckboxChange = (id: string) => {
-  if (selectedFlavors.find(flavor => flavor === id)) {
-    selectedFlavors.splice(selectedFlavors.indexOf(id), 1)
-  } else {
-    selectedFlavors.push(id)
-  }
-}
+const childFlavors = ref<any[]>(props.flavorList.filter(f => f.parentId === props.flavor.id))
 </script>

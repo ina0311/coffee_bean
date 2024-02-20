@@ -2,7 +2,7 @@
 // @ts-ignore
 import StarRating from 'vue-star-rating'
 import { defineProps } from 'vue'
-import { Field } from 'vee-validate'
+import { Field, ErrorMessage } from 'vee-validate'
 
 const props = defineProps({
   label: {
@@ -43,6 +43,7 @@ const handleSelectedStar = (rating: number) => {
   <Field :name="props.name" :rules="props.rules" :value="props.value">
     <label class="label" :for="props.name">{{ props.label }}</label>
     <StarRating :name="props.name" :props.increment="0.5" :value="props.value" @update:rating="handleSelectedStar"/>
+    <ErrorMessage :name="props.name" class="help is-danger"/>
   </Field>
 </template>
 

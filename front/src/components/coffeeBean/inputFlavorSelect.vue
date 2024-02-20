@@ -1,17 +1,39 @@
 <template>
-  <Field :name="props.name" :rules="props.rules" validateOnInput @blur="hideDropDown" v-model="fieldValue">
+  <Field :name="props.name" :rules="props.rules"  @blur="hideDropDown" v-model="fieldValue" multiple>
     <label :for="props.name" class="label">{{ props.label }}</label>
     <Combobox.Root
-      :multiple="true"
+      v-model="isShowDropDown"
+      multiple
     >
       <Combobox.Anchor>
-        <Combobox.Input
-          :name="props.name"
-          :value="props.value"
-          :placeholder="props.placeholder"
-          :type="props.type"
+        <TagsInput.Root
+          v-slot="{ modelValue: tags }"
+          :model-value="flavorOptions.filter((flavor: any) => props.value.includes(flavor.id)).map((value: any) => value.ja)"
+          delimiter=""
+          class="is-flex is-flex-wrap-wrap"
         >
-        </Combobox.Input>
+          <TagsInput.Item
+            v-for="item in tags"
+            :key="item"
+            :value="item"
+          >
+            <TagsInput.ItemText class="item-name" :data-flavor="item"/>
+            <TagsInput.ItemDelete @click="handleDelete">
+              <span class="icon is-small">
+                <i class="fas fa-times" aria-hidden="true"></i>
+              </span>
+            </TagsInput.ItemDelete>
+          </TagsInput.Item>
+          <Combobox.Input as-child>
+            <TagsInput.Input
+              placeholder="選択してください"
+              @focus="isShowDropDown = true"
+              @blur="hideDropDown"
+              class="form"
+            >
+            </TagsInput.Input>
+          </Combobox.Input>
+        </TagsInput.Root>
         <Combobox.Trigger>
           <span class="icon is-small is-right">
             <i class="fas fa-angle-down" aria-hidden="true"></i>
@@ -23,40 +45,28 @@
         <Combobox.Viewport>
           <Combobox.Empty />
           <Combobox.Group>
-            <Combobox.Item v-for="option in parentFlavorOptions" :key="option.id" :value="option.id" @select.prevent>
+            <Combobox.Item v-for="option in props.parentFlavorOptions" :key="option.id" :value="option.id" @select.prevent>
               <Combobox.ItemIndicator>
               </Combobox.ItemIndicator>
               <FlavorItem
                 :flavor="option"
-                :flavorList="flavorOptions"
+                :flavorList="props.flavorOptions"
+                :handleInput="props.handleInput"
               />
             </Combobox.Item>
           </Combobox.Group>
         </Combobox.Viewport>
       </Combobox.Content>
     </Combobox.Root>
+    <ErrorMessage :name="props.name" class="help is-danger" />
   </Field>
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref, onMounted } from 'vue'
-import { Field } from 'vee-validate'
-// import { FLAVOR_LIST, FLAVOR_TYPE } from '@/utils/constants'
-import { Combobox } from 'radix-vue/namespaced'
+import { defineProps, ref } from 'vue'
+import { Field, ErrorMessage } from 'vee-validate'
+import { Combobox, TagsInput } from 'radix-vue/namespaced'
 import FlavorItem from './FlavorItem.vue'
-import apiClient from '@/services/apiClient'
-
-// const flavorOptions = ref<(FLAVOR_TYPE & { checked: boolean })[]>(FLAVOR_LIST.map(option => ({ ...option, checked: false })))
-const flavorOptions = ref<any[]>([])
-const parentFlavorOptions = ref<any[]>([])
-const fieldValue = ref<string>("")
-
-const isShowDropDown = ref<boolean>(false)
-const hideDropDown = () => {
-  setTimeout(() => {
-    isShowDropDown.value = false
-  }, 100)
-}
 
 const props = defineProps({
   label: {
@@ -68,12 +78,8 @@ const props = defineProps({
     required: true
   },
   value: {
-    type: Array as () => string[] | number[],
+    type: Array as () => any[],
     default: []
-  },
-  placeholder: {
-    type: String,
-    default: ""
   },
   type: {
     type: String,
@@ -83,14 +89,41 @@ const props = defineProps({
     type: String,
     default: ""
   },
+  flavorOptions: {
+    type: Array as () => any[],
+    required: true
+  },
+  parentFlavorOptions: {
+    type: Array as () => any[],
+    required: true
+  },
+  handleInput: {
+    type: Function,
+    required: true
+  }
 })
 
-onMounted(async () => {
-  const result = await apiClient.get('/flavors')
-  flavorOptions.value = result.data.map((option: any) => ({ ...option, checked: false }))
-  parentFlavorOptions.value = flavorOptions.value.filter((option: any) => option.parentId === null)
-})
+const fieldValue = ref<any[]>([])
 
+const handleDelete = (event: Event) => {
+  const deleteButton = (event!.target as Element).closest('button')?.previousElementSibling as HTMLElement
+  if (!deleteButton) return
+
+  const deleteFlavorName = deleteButton.dataset.flavor
+  if (!deleteFlavorName) return
+
+  const deleteFlavor = props.flavorOptions.find((flavor: any) => flavor.ja === deleteFlavorName)
+  if (!deleteFlavor) return
+
+  props.handleInput(deleteFlavor.id)
+}
+
+const isShowDropDown = ref<boolean>(false)
+const hideDropDown = () => {
+  setTimeout(() => {
+    isShowDropDown.value = false
+  }, 100)
+}
 </script>
 <style scoped lang="stylus">
 
@@ -102,6 +135,12 @@ onMounted(async () => {
   bottom: 0
   background-color: rgba(0, 0, 0, 0)
   z-index: 1
+
+.form
+  border: none
+
+  &:focus
+    outline: none
 
 .form-dropdown
   position: absolute

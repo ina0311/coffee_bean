@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import {reactive, ref, provide, onMounted} from 'vue'
+import {reactive, ref, onMounted} from 'vue'
 import {useRouter} from 'vue-router'
 import {Form} from 'vee-validate'
 import axios from 'axios'
+import { toTypedSchema } from '@vee-validate/zod'
 import InputFlavorSelect from '@/components/coffeeBean/inputFlavorSelect.vue'
 import InputStarRating from '@/components/coffeeBean/inputStarLating.vue'
 import InputText from '@/components/form/InputText.vue'
@@ -11,15 +12,19 @@ import SubmitButton from '@/components/form/SubmitButton.vue'
 import ErrorMessage from '@/components/form/ErrorMessage.vue'
 import apiClient from '@/services/apiClient'
 import {COFFEE_STYLES} from '@/utils/constants'
+import { reviewSchema } from '@/validates/review'
 
 const router = useRouter()
 const formErrors = ref<string[]>([])
 const coffeeBean = ref<any>()
+const flavorOptions = ref<any[]>([])
+
+const typedReviewSchema = toTypedSchema(reviewSchema)
 
 const review = reactive<{
   coffeeStyle: string,
   coffeeBeanId?: number,
-  flavors: number[],
+  flavorIds: number[],
   total: number,
   acidity: number,
   bitterness: number,
@@ -29,7 +34,7 @@ const review = reactive<{
 }>({
   coffeeStyle: '',
   coffeeBeanId: undefined,
-  flavors: [],
+  flavorIds: [],
   total: 0,
   acidity: 0,
   bitterness: 0,
@@ -38,22 +43,34 @@ const review = reactive<{
   describe: undefined
 })
 
-provide('review', review)
-
 const handleNumberInput = (value: number, reviewKey: 'total' | 'acidity' | 'bitterness' | 'body' | 'afterTaste') => {
   review[reviewKey] = value
 }
 
 const handleInput = (value: string, formDataKey: 'describe' | 'coffeeStyle') => {
+  debugger
   review[formDataKey] = value
 }
 
+const handleToggleFlavorCheck = (flavorId: number) => {
+  flavorOptions.value = flavorOptions.value.map((value: any) => {
+    if (value.id !== flavorId) return value
+    value.checked = !value.checked
+    return value
+  })
+
+  if (review.flavorIds.find(flavor => flavor === flavorId)) {
+    review.flavorIds.splice(review.flavorIds.indexOf(flavorId), 1)
+  } else {
+    review.flavorIds.push(flavorId)
+  }
+}
 
 const onSubmit = async () => {
   try {
     await apiClient.post(`/coffeeBeans/${coffeeBean.value.id}/reviews`, {
       coffeeStyle: review.coffeeStyle,
-      flavors: review.flavors,
+      flavorIds: review.flavorIds,
       total: review.total,
       acidity: review.acidity,
       bitterness: review.bitterness,
@@ -73,6 +90,9 @@ onMounted(async () => {
   const coffeeBeanId = router.currentRoute.value.params.id
   const response = await apiClient.get(`/coffeeBeans/${+coffeeBeanId}`)
   coffeeBean.value = response.data
+
+  const result = await apiClient.get('/flavors')
+  flavorOptions.value = result.data.map((option: any) => ({ ...option, checked: false }))
 })
 </script>
 
@@ -86,14 +106,14 @@ onMounted(async () => {
     <h3>{{ coffeeBean.price }}</h3>
     <h3>{{ coffeeBean.minAltitude }} ~ {{ coffeeBean.maxAltitude }}</h3>
 
-    <Form class="field" @submit="onSubmit" v-slot={errors}>
+    <Form class="field" @submit="onSubmit" :validation-schema="typedReviewSchema" v-slot={errors}>
       <ErrorMessage :errorMessages="formErrors" />
       <InputSelect
         label="コーヒースタイル"
         name="coffeeStyle"
         type="text"
         :options="Object.values(COFFEE_STYLES)"
-        @change-input="handleInput"
+        :handleInput="handleInput"
         :error="errors.coffeeStyle"
       />
       <InputStarRating :increment="0.5" :value="review.total" name="total" label="お気に入り度" :handleInput="handleNumberInput"/>
@@ -103,10 +123,13 @@ onMounted(async () => {
       <InputStarRating :increment="0.5" :value="review.afterTaste" name="afterTaste" label="後味" :handleInput="handleNumberInput"/>
       <InputFlavorSelect
         label="Flavor"
-        name="flavors"
+        name="flavorIds"
         type="text"
-        :value="review.flavors"
-        :error="errors.flavors"
+        :handleInput="handleToggleFlavorCheck"
+        :value="review.flavorIds"
+        :flavorOptions="flavorOptions"
+        :parentFlavorOptions="flavorOptions.filter(f => f.parentId === null)"
+        :error="errors.flavorIds"
       />
       <InputText
         label="メモ"
