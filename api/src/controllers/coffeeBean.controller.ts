@@ -63,17 +63,11 @@ export const findAllReviews = catchAsync(async (req: LoggedRequest, res: Respons
   const reviews = await Models.Review.findAll({
     include: [
       {
-        model: Models.CoffeeBean,
-        as: 'coffeeBean',
-        where: {
-          id: coffeeBeanId
-        }
-      },
-      {
         model: Models.UserCoffeeBean,
         as: 'userCoffeeBeans',
         where: {
-          userId
+          userId,
+          coffeeBeanId
         }
       }
     ]
@@ -85,7 +79,7 @@ export const findAllReviews = catchAsync(async (req: LoggedRequest, res: Respons
 export const createReview = catchAsync(async (req: LoggedRequest, res: Response) => {
   const userId = req.userId!
   const coffeeBeanId = req.params.id
-  const {coffeeStyle, total, acidity, bitterness, body, afterTaste, describe} = req.body
+  const {coffeeStyle, total, acidity, bitterness, body, afterTaste, describe, flavorIds} = req.body
   const userBean = await coffeeBeanService.userCoffeeBeanFindOrCreate(userId, +coffeeBeanId)
   if (!userBean) {
     res.status(httpStatus.NOT_FOUND).send('Not found')
@@ -102,30 +96,30 @@ export const createReview = catchAsync(async (req: LoggedRequest, res: Response)
     afterTaste,
     describe
   })
+
+  debugger
+  await Models.ReviewFlavor.bulkCreate(flavorIds.map((flavorId: string) => {
+    return {
+      reviewId: review.id,
+      flavorId: +flavorId
+    }
+  }))
   res.status(httpStatus.CREATED).send(review)
 })
 
 export const findReview = catchAsync(async (req: LoggedRequest, res: Response) => {
-  const userId = req.userId!
   const coffeeBeanId = req.params.id
   const reviewId = req.params.reviewId
-  debugger
   const coffeeBean = await Models.CoffeeBean.findByPk(coffeeBeanId)
   const review = await Models.Review.findOne({
     include: [
       {
-        model: Models.CoffeeBean,
-        as: 'coffeeBean',
-        where: {
-          id: coffeeBeanId
-        }
-      },
-      {
         model: Models.UserCoffeeBean,
         as: 'userCoffeeBeans',
-        where: {
-          userId
-        }
+      },
+      {
+        model: Models.Flavor,
+        as: 'flavors'
       }
     ],
     where: {

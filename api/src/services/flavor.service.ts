@@ -8,12 +8,6 @@ export const createBeanFlavorWithReview = async (userId: number, coffeeBeanId: n
     }
   })
   const userBeanId = userCoffeeBean.id
-  for (const flavorId of flavorIds) {
-    await Models.UserBeanFlavor.create({
-      userBeanId,
-      flavorId
-    })
-  }
   const review = await Models.Review.create({
     userBeanId,
     coffeeStyle: 0,
