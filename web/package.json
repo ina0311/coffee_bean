@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@coffee-bean/common": "file:../common",
     "@types/crypto-js": "^4.2.2",
     "axios": "^1.7.9",
     "crypto-js": "^4.2.0",
