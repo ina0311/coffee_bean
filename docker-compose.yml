@@ -1,80 +1,94 @@
-version: '3'
-services:
-  front:
-    container_name: front
-    build: ./docker/front
-    ports:
-      - 5173:5173
-    volumes:
-      - ./front:/front
-    stdin_open: true
-    tty: true
-    env_file: .env
-    command: npm run dev
-    networks:
-      - default
-  web:
-    container_name: web
-    build:
-      context: ./
-      dockerfile: ./docker/web/Dockerfile
-    ports:
-      - 5173:5173
-    volumes:
-      - ./web:/web
-      - ./web/node_modules:/web/node_modules
-    env_file: .env
-    command:
-      - bash
-      - -uexc
-      - |
-        npm i
-        npm run dev
-    stdin_open: true
-    tty: true
-    environment:
-      - NODE_ENV=development
-      - CHOKIDAR_USEPOLLING=true
-    networks:
-      - default
+version: '3.8'
 
-  api:
-    container_name: api
-    build: ./docker/api
+services:
+  api: &api-base
+    build:
+      context: .
+      dockerfile: docker/api/Dockerfile
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_PORT=${MYSQL_PORT}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRES_IN=${JWT_EXPIRES_IN}
+      - CORS_ORIGIN=${CORS_ORIGIN}
+      - TZ=${TZ}
     ports:
-      - 3000:3000
-      - 3001:3001
+      - "${API_PORT}:${API_PORT}"
     volumes:
       - ./api:/api
-    stdin_open: true
+      - api_node_modules:/api/node_modules
+    command: npm run dev
     tty: true
-    environment:
-      - MYSQL_HOST=db
-    env_file: .env
-    command: npm run nodemon
-    expose:
-      - 3001
+    user: "root"
+    profiles:
+      - base
+
+  api-dev:
+    <<: *api-base
     depends_on:
-      - db
-    networks:
-      - default
+      db:
+        condition: service_healthy
+    profiles:
+      - dev
+
+  web: &web-base
+    build:
+      context: .
+      dockerfile: docker/web/Dockerfile
+    volumes:
+      - ./web:/web
+      - web_node_modules:/web/node_modules
+    ports:
+      - "5173:5173"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - VITE_API_URL=${VITE_API_URL}
+      - TZ=${TZ}
+    command: npm run dev
+    tty: true
+    user: "root"
+    profiles:
+      - base
+
+  web-dev:
+    <<: *web-base
+    depends_on:
+      api-dev:
+        condition: service_started
+      db:
+        condition: service_healthy
+    profiles:
+      - dev
 
   db:
-    container_name: db
-    build: ./docker/db
-    image: mysql:8.0
-    ports:
-      - 3306:3306
-    env_file: .env
+    build:
+      context: .
+      dockerfile: docker/db/Dockerfile
+    hostname: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - TZ=${TZ}
     volumes:
-      - ./db/conf/my.cnf:/etc/mysql/conf.d/my.cnf
-      - mysql-data:/var/lib/mysql
-    networks:
-      - default
-
-networks:
-  default:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - '3306:3306'
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
 volumes:
-  mysql-data:
+  mysql_data:
+  api_node_modules:
+  web_node_modules:
+
 
