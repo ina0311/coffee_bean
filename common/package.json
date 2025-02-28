@@ -1,9 +1,12 @@
 {
-  "name": "@coffee-bean/common",
+  "name": "coffee-bean-root",
   "version": "1.0.0",
   "private": true,
-  "main": "types/models.ts",
-  "types": "types/models.ts",
+  "workspaces": [
+    "types",
+    "api",
+    "web"
+  ],
   "dependencies": {
     "typescript": "~5.6.2"
   }

@@ -3,8 +3,19 @@ export interface User {
   id: number;
   name: string;
   email: string;
-  created_at: Date;
-  updated_at: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Auth {
+  id: number;
+  password_hash: string;
+  last_login_at?: Date;
+  refresh_token?: string;
+  refresh_token_expires_at?: Date;
+  user: User;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface Coffee {

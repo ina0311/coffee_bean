@@ -161,3 +161,6 @@ test/
 .env
 .env.*
 !.env.example
+
+# Ignore cursorrules file
+.cursorrules

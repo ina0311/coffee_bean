@@ -11,7 +11,6 @@ COPY web/package*.json ./
 # 依存関係のインストール
 RUN npm install
 
-
 # 本番ステージ
 FROM node:22-slim as prod
 

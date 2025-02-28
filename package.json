@@ -1,9 +1,0 @@
-{
-  "name": "coffee-bean",
-  "private": true,
-  "workspaces": [
-    "api",
-    "web",
-    "common"
-  ]
-}

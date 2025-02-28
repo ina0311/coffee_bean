@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: docker/api/Dockerfile
+    working_dir: /api
     environment:
       - NODE_ENV=${NODE_ENV}
       - MYSQL_HOST=${MYSQL_HOST}
@@ -20,10 +21,10 @@ services:
       - "${API_PORT}:${API_PORT}"
     volumes:
       - ./api:/api
+      - ./common:/common
       - api_node_modules:/api/node_modules
     command: npm run dev
     tty: true
-    user: "root"
     profiles:
       - base
 
@@ -39,8 +40,10 @@ services:
     build:
       context: .
       dockerfile: docker/web/Dockerfile
+    working_dir: /web
     volumes:
       - ./web:/web
+      - ./common:/common
       - web_node_modules:/web/node_modules
     ports:
       - "5173:5173"
@@ -50,7 +53,6 @@ services:
       - TZ=${TZ}
     command: npm run dev
     tty: true
-    user: "root"
     profiles:
       - base
 
@@ -90,5 +92,3 @@ volumes:
   mysql_data:
   api_node_modules:
   web_node_modules:
-
-

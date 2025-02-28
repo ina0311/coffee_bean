@@ -1,15 +1,29 @@
+import 'reflect-metadata'
 import express from 'express'
+import cors from 'cors'
+import { initializeDatabase } from './database/data-source'
 import router from './routes'
-import cors from './utils/cors'
 
 const app = express()
 
-app.use(cors)
-
+app.use(cors())
 app.use(express.json())
 
-app.use('/api/v1', router)
+// APIルートの設定
+app.use('/v1', router)
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000')
-})
+const startServer = async () => {
+  try {
+    await initializeDatabase()
+    
+    const PORT = process.env.PORT || 3000
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`)
+    })
+  } catch (error) {
+    console.error('Failed to start server:', error)
+    process.exit(1)
+  }
+}
+
+startServer()
