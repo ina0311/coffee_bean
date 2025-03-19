@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm"
-import type { Coffee as ICoffee } from "@coffee-bean/common/types/models"
+import type { Coffee as ICoffee } from "@coffee-bean/types"
 
 @Entity('coffees')
 export class Coffee implements ICoffee {

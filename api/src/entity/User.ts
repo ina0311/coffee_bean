@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm'
-import type { User as IUser } from '@coffee-bean/common/types/models'
+import type { User as IUser } from '@coffee-bean/types'
 
 @Entity('users')
 export class User implements IUser {
