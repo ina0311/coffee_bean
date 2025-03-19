@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import {CoffeeFlavorWheel} from '../components/CoffeeFlavorWheel'
 
 
 export const Home = () => {
@@ -39,6 +40,7 @@ export const Home = () => {
             </p>
           </div>
         </section>
+        <CoffeeFlavorWheel />
       </main>
     </div>
   )
