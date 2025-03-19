@@ -26,7 +26,7 @@
 
     /* Modules */
     "module": "commonjs",
-    "rootDir": "./src",
+    "rootDir": "..",
     "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
@@ -116,7 +116,10 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true,                                 /* Skip type checking all .d.ts files. */
   },
-  "include": ["src/**/*"],
+  "include": [
+    "src/**/*",
+    "../common/**/*"
+  ],
   "references": [
     { "path": "../common" }
   ]

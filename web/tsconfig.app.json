@@ -9,18 +9,17 @@
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "moduleResolution": "Bundler",
+    "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
     "isolatedModules": true,
-    "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
 
     /* Paths */
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
-      "@coffee-bean/common/*": ["../common/*"],
-      "*": ["../node_modules/*"]
+      "@/*": ["./src/*"]
     },
 
     /* Linting */
@@ -30,7 +29,4 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts"],
-  "references": [
-    { "path": "../common" }
-  ]
 }
