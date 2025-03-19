@@ -9,8 +9,7 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-// APIルートの設定
-app.use('/v1', router)
+app.use(router)
 
 const startServer = async () => {
   try {
